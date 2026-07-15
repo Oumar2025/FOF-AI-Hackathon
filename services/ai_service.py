@@ -2,7 +2,7 @@ from datetime import datetime
 from services.forecast_service import ForecastService
 from services.product_service import ProductService
 from services.product_service import ProductService
-from services.gemini_service import GeminiService
+from services.gemma_service import GemmaService
 
 
 
@@ -417,6 +417,53 @@ class AIService:
     """
 
         return report
+
+    @staticmethod
+    def explain_recommendation(product):
+
+        analysis = AIService.analyze_product(product)
+
+        prompt = f"""
+    You are FOF-AI, an Executive AI Business Consultant for ETS FOFANA CONFISERIE.
+
+    Your task is to explain WHY the recommendation was made.
+
+    Product Information
+
+    Product Name: {product[1]}
+    Category: {product[2]}
+    Supplier Country: {product[4]}
+    Current Stock: {product[6]} {product[7]}
+    Profit Margin: {analysis['margin']}%
+    Days Until Expiry: {analysis['days_left']}
+    Recommendation: {analysis['recommendation']}
+
+    Rules:
+
+    - Think like an experienced Supply Chain Manager.
+    - Explain the business reasons behind the recommendation.
+    - Never invent information.
+    - Keep the explanation short and practical.
+    - Use exactly this format.
+
+    ### Why?
+
+    • Reason 1
+
+    • Reason 2
+
+    • Reason 3
+
+    ### Business Impact
+
+    One short sentence explaining how this recommendation helps the company.
+
+    ### Confidence
+
+    Give only one percentage from 0–100%.
+    """
+
+        return GemmaService.ask(prompt)
 
     @staticmethod
     def check_and_send_alerts():

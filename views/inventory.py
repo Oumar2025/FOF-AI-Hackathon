@@ -1,3 +1,5 @@
+# inventory.py file for the inventory management page in the Streamlit app
+
 import streamlit as st
 import pandas as pd
 
@@ -384,9 +386,21 @@ def show_inventory():
             "### 💡 AI Recommendation"
         )
 
-        st.write(
+        st.success(
             analysis["recommendation"]
         )
+
+        if st.button("🤖 Explain Recommendation"):
+
+            with st.spinner("Gemma is analyzing the recommendation..."):
+
+                explanation = AIService.explain_recommendation(
+                    selected_product
+                )
+
+            st.write("### 🤖 AI Business Explanation")
+
+            st.info(explanation)
         st.markdown("---")
 
         from services.promotion_service import PromotionService
@@ -549,4 +563,48 @@ def show_inventory():
         of this product from **{recommendation['supplier']}**
         {recommendation['timing'].lower()}.
         """
-        )      
+        )
+
+        st.markdown("---")
+
+        st.subheader("🧠 AI Decision Simulator")
+
+        from services.decision_simulator_service import DecisionSimulatorService
+
+        planned_import = st.number_input(
+            "How many cartons do you plan to import?",
+            min_value=0,
+            step=10
+        )
+
+        if st.button("🧠 Simulate Decision"):
+
+            with st.spinner("Gemma is simulating your business decision..."):
+
+                simulation = DecisionSimulatorService.simulate_import(
+                    selected_product,
+                    planned_import
+                )
+
+            st.success("✅ Decision Simulation Complete")
+
+            st.info(simulation) 
+
+
+        st.markdown("---")
+
+        st.subheader("📋 AI Weekly Business Action Plan")
+
+        from services.action_plan_service import ActionPlanService
+
+        if st.button("📋 Generate Weekly Business Action Plan"):
+
+            with st.spinner("Gemma is creating your executive business plan..."):
+
+                plan = ActionPlanService.generate_action_plan(
+                    selected_product
+                )
+
+            st.success("✅ Weekly Business Action Plan Ready")
+
+            st.markdown(plan)         
