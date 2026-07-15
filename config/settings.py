@@ -1,0 +1,7 @@
+DATABASE_NAME = "database/inventory.db"
+
+COMPANY_NAME = "ETS FOFANA CONFISERIE"
+
+APP_NAME = "FOF-AI"
+
+VERSION = "1.0"

@@ -1,0 +1,12 @@
+Event,StartDate,EndDate,Category,DemandMultiplier
+Ramadan,2026-02-17,2026-03-18,Dates,1.80
+Ramadan,2026-02-17,2026-03-18,Biscuit,1.20
+Ramadan,2026-02-17,2026-03-18,Chocolate,1.15
+Ramadan,2026-02-17,2026-03-18,Candy,1.10
+
+Eid al-Fitr,2026-03-19,2026-03-22,Chocolate,1.40
+Eid al-Fitr,2026-03-19,2026-03-22,Candy,1.35
+Eid al-Fitr,2026-03-19,2026-03-22,Biscuit,1.20
+
+Christmas,2026-12-20,2026-12-31,Chocolate,1.60
+Christmas,2026-12-20,2026-12-31,Candy,1.50
