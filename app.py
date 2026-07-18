@@ -77,54 +77,29 @@ div[role="radiogroup"] label{
 # Sidebar
 # -------------------------------------------------
 
-st.sidebar.markdown(
-    '<p class="sidebar-title">🤖 FOF-AI</p>',
-    unsafe_allow_html=True
-)
+from components.sidebar import show_sidebar
 
-st.sidebar.markdown(
-    '<p class="sidebar-subtitle">Navigation</p>',
-    unsafe_allow_html=True
-)
-
-menu = st.sidebar.pills(
-    "",
-    [
-        "Dashboard",
-        "Inventory",
-        "Forecast",
-        "AI Assistant",
-        "Executive Report",
-        "Settings"
-    ]
-)
-
-st.sidebar.markdown("---")
-
-st.sidebar.info(
-    "ETS FOFANA CONFISERIE\n\n"
-    "AI Business Intelligence Assistant"
-)
+menu = show_sidebar()
 
 # -------------------------------------------------
 # Dashboard
 # -------------------------------------------------
 
-if menu == "Dashboard":
+if menu == "📊 Dashboard":
     show_dashboard()
     
 # -------------------------------------------------
 # Inventory Page
 # -------------------------------------------------
 
-elif menu == "Inventory":
+elif menu == "📦 Inventory":
     show_inventory()      
 
-elif menu == "Forecast":
+elif menu == "📈 Forecast":
     show_forecast()
 
-elif menu == "AI Assistant":
+elif menu == "🤖 AI Assistant":
     show_ai_assistant()
 
-elif menu == "Executive Report":
+elif menu == "📋 Executive Report":
     show_executive_report()    

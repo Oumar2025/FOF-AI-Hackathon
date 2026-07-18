@@ -6,7 +6,7 @@ load_dotenv()
 
 
 class GemmaService:
-
+    
     client = genai.Client(
         api_key=os.getenv("GOOGLE_API_KEY")
     )

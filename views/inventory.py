@@ -7,13 +7,17 @@ from models.product import Product
 from services.product_service import ProductService
 from services.ai_service import AIService
 from datetime import datetime
+from components.header import show_header
 
 
 def show_inventory():
 
-    st.title("📦 Inventory Management")
+    show_header(
+        "📦 Inventory Management",
+        "Manage products and receive AI-powered business insights."
+    )
 
-    st.markdown("---")
+    
 
     products = ProductService.get_all_products()
 
@@ -401,6 +405,7 @@ def show_inventory():
             st.write("### 🤖 AI Business Explanation")
 
             st.info(explanation)
+            
         st.markdown("---")
 
         from services.promotion_service import PromotionService

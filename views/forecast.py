@@ -2,11 +2,15 @@ import streamlit as st
 import plotly.express as px
 
 from services.forecast_service import ForecastService
+from components.header import show_header
 
 
 def show_forecast():
 
-    st.title("📈 Demand Forecasting")
+    show_header(
+        "📈 Demand Forecast",
+        "Predict future inventory demand using AI."
+    )
 
     products = [
         "Oreo Biscuit",

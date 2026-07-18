@@ -1,11 +1,15 @@
 import streamlit as st
 
 from services.ai_service import AIService
+from components.header import show_header
 
 
 def show_ai_assistant():
 
-    st.title("🤖 AI Business Assistant")
+    show_header(
+        "🤖 AI Assistant",
+        "Ask Gemma 4 questions about your business."
+    )
 
     st.write(
         "Ask questions about your business."

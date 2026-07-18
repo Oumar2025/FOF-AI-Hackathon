@@ -9,22 +9,19 @@ from services.ai_service import AIService
 
 
 
+
 def show_dashboard():
 
-    st.title("🤖 FOF-AI")
+    from components.header import show_header
 
-    st.subheader("AI Business Intelligence Assistant")
-    st.subheader("🚨 Smart Business Alerts")
-
-    if st.button("📧 Check & Send Alerts"):
-
-        AIService.check_and_send_alerts()
-
-        st.success("✅ Alert check completed successfully!")
-
-    st.markdown("---")
+    show_header(
+        "🤖 FOF-AI",
+        "AI Business Intelligence Assistant"
+    )
 
     stats = ProductService.get_dashboard_statistics()
+
+    st.subheader("📊 Business Overview")
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -35,68 +32,7 @@ def show_dashboard():
 
     st.markdown("---")
 
-    st.subheader("📊 Business Analytics")
-
-    category_data, supplier_data, destination_data = ProductService.get_chart_data()
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        if category_data:
-
-            category_df = pd.DataFrame(
-                category_data,
-                columns=["Category", "Products"]
-            )
-
-            fig = px.pie(
-                category_df,
-                names="Category",
-                values="Products",
-                title="Inventory by Category"
-            )
-
-            st.plotly_chart(fig, width="stretch")
-
-    with col2:
-
-        if supplier_data:
-
-            supplier_df = pd.DataFrame(
-                supplier_data,
-                columns=["Supplier", "Products"]
-            )
-
-            fig = px.bar(
-                supplier_df,
-                x="Supplier",
-                y="Products",
-                title="Products by Supplier Country"
-            )
-
-            st.plotly_chart(fig, width="stretch")
-
-    if destination_data:
-
-        destination_df = pd.DataFrame(
-            destination_data,
-            columns=["Destination", "Products"]
-        )
-
-        fig = px.bar(
-            destination_df,
-            x="Destination",
-            y="Products",
-            title="Products by Destination Country",
-            text="Products"
-        )
-
-    st.plotly_chart(fig, width="stretch")
-
-
-    st.markdown("---")
-
+    st.subheader("🚨 Smart Business Alerts")
     products = ProductService.get_all_products()
 
     report = AIService.company_advisor(products)
@@ -132,9 +68,102 @@ def show_dashboard():
         st.markdown("### 💡 AI Recommendations")
 
         for item in report["recommendations"]:
-            st.info(item)    
+            st.info(item) 
 
-    st.header("Company Overview")
+    if st.button("📧 Check & Send Alerts"):
+
+        AIService.check_and_send_alerts()
+
+        st.success("✅ Alert check completed successfully!")
+
+    
+
+    st.markdown("---")
+
+    st.subheader("📈 Business Analytics")
+
+    category_data, supplier_data, destination_data = ProductService.get_chart_data()
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        if category_data:
+
+            category_df = pd.DataFrame(
+                category_data,
+                columns=["Category", "Products"]
+            )
+
+            fig = px.pie(
+                category_df,
+                names="Category",
+                values="Products",
+                title="Inventory by Category"
+            )
+            fig.update_layout(
+                template="plotly_dark",
+                margin=dict(l=20, r=20, t=50, b=20),
+                height=380,
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
+            st.write("")        
+
+    with col2:
+
+        if supplier_data:
+
+            supplier_df = pd.DataFrame(
+                supplier_data,
+                columns=["Supplier", "Products"]
+            )
+
+            fig = px.bar(
+                supplier_df,
+                x="Supplier",
+                y="Products",
+                title="Products by Supplier Country"
+            )
+            fig.update_layout(
+                template="plotly_dark",
+                margin=dict(l=20, r=20, t=50, b=20),
+                height=380,
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
+            st.write("")
+    
+    if destination_data:
+
+        destination_df = pd.DataFrame(
+            destination_data,
+            columns=["Destination", "Products"]
+        )
+        
+
+        fig = px.bar(
+            destination_df,
+            x="Destination",
+            y="Products",
+            title="Products by Destination Country",
+            text="Products"
+        )
+        fig.update_layout(
+            template="plotly_dark",
+            margin=dict(l=20, r=20, t=50, b=20),
+            height=380,
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.write("")
+    
+    st.markdown("---")
+
+       
+
+    st.header("🏢 Company Overview")
 
     st.write("""
 Welcome to **FOF-AI**.

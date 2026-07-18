@@ -359,7 +359,7 @@ class AIService:
         Business Answer:
         """
 
-        return GeminiService.ask(prompt)
+        return GemmaService.ask(prompt)
     
     @staticmethod
     def generate_executive_report():
