@@ -33,39 +33,48 @@ def show_dashboard():
     st.markdown("---")
 
     st.subheader("🚨 Smart Business Alerts")
+
+    st.info("""
+    ### 🎯 Priority Actions Today
+
+    Review today's alerts before making import or promotion decisions.
+
+    The AI recommendations below are generated from your current inventory, expiry dates, and business trends.
+    """)
+
     products = ProductService.get_all_products()
 
     report = AIService.company_advisor(products)
 
-    st.subheader("🤖 Executive AI Brief")
+    st.subheader("🧠 AI Business Advisor")
 
     if report["health"] == "Excellent":
-        st.success("🟢 Business Health: Excellent")
+        st.success("🟢 Overall Business Health: Excellent")
 
     elif report["health"] == "Good":
-        st.warning("🟡 Business Health: Good")
+        st.warning("🟡 Overall Business Health: Good")
 
     else:
-        st.error("🔴 Business Health: Needs Attention")
+        st.error("🔴 Overall Business Health: Needs Attention")
 
 
     if report["critical"]:
 
-        st.markdown("### 🚨 Critical Alerts")
+        st.markdown("### 🔴 Immediate Attention")
 
         for item in report["critical"]:
             st.error(item)
 
     if report["warnings"]:
 
-        st.markdown("### ⚠ Inventory Warnings")
+        st.markdown("### 🟡 Inventory Warnings")
 
         for item in report["warnings"]:
             st.warning(item)
 
     if report["recommendations"]:
 
-        st.markdown("### 💡 AI Recommendations")
+        st.markdown("### 💡 Recommended Actions")
 
         for item in report["recommendations"]:
             st.info(item) 

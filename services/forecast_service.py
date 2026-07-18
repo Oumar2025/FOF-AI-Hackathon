@@ -78,3 +78,61 @@ class ForecastService:
                 return row["DemandMultiplier"], row["Event"]
 
         return 1.0, None    
+    
+    @staticmethod
+    def forecast_all_products():
+
+        from services.product_service import ProductService
+
+        ranking = []
+
+        products = ProductService.get_all_products()
+
+        for product in products:
+
+            product_name = product[1]      # Product Name
+            category = product[2]          # Category
+            quantity = product[6]          # Current Stock
+
+            prediction = ForecastService.get_next_month_prediction(product_name)
+
+            if prediction is None:
+                continue
+
+            multiplier, event = ForecastService.seasonal_multiplier(category)
+
+            expected_demand = round(prediction * multiplier)
+
+            if expected_demand > quantity:
+
+                recommendation = "Increase Import"
+
+            elif expected_demand < quantity * 0.6:
+
+                recommendation = "Monitor"
+
+            else:
+
+                recommendation = "Maintain Stock"
+
+            ranking.append({
+
+                "Product": product_name,
+                "Current Stock": quantity,
+                "Expected Demand": expected_demand,
+                "Recommendation": recommendation,
+                "Seasonal Event": event if event else "-"
+
+            })
+
+        ranking = sorted(
+
+            ranking,
+
+            key=lambda x: x["Expected Demand"],
+
+            reverse=True
+
+        )
+
+        return ranking

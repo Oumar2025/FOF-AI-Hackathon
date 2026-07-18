@@ -262,3 +262,10 @@ class ProductService:
                 )
 
         return expiring
+    
+    @staticmethod
+    def get_product_names():
+
+        products = ProductService.get_all_products()
+
+        return [p[1] for p in products]
