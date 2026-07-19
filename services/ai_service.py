@@ -259,105 +259,76 @@ class AIService:
     @staticmethod
     def business_chat(question):
 
-        products = ProductService.get_all_products()
+        import json
 
-        inventory = ""
+        from services.business_intelligence_service import (
+            BusinessIntelligenceService
+        )
 
-        for p in products:
-
-            forecast = ForecastService.get_next_month_prediction(
-                p[1]
-            )
-
-            if forecast is None:
-                forecast = p[6]
-
-            multiplier, event = ForecastService.seasonal_multiplier(
-                p[2]
-            )
-
-            predicted = round(
-                forecast * multiplier
-            )
-
-            recommended_import = max(
-                predicted - p[6],
-                0
-            )
-
-            inventory += f"""
-    Product: {p[1]}
-    Category: {p[2]}
-    Brand: {p[3]}
-    Supplier: {p[4]}
-    Destination: {p[5]}
-
-    Current Stock: {p[6]}
-
-    Predicted Demand: {predicted}
-
-    Recommended Import: {recommended_import}
-
-    Season: {event if event else "Normal"}
-
-    Cost Price: {p[8]}
-
-    Selling Price: {p[9]}
-
-    Expiry Date: {p[11]}
-
-    Warehouse: {p[12]}
-
-    Status: {p[13]}
-
-    """
+        report = BusinessIntelligenceService.generate_business_report()
 
         prompt = f"""
-        You are FOF-AI, an AI Business Intelligence Assistant developed for
-        ETS FOFANA CONFISERIE.
+    You are FOF-AI,
+    an Executive Business Intelligence Assistant developed for
+    ETS FOFANA CONFISERIE.
 
-        Company Profile:
-        - Imports food products from Turkey, Morocco, Tunisia and Brazil.
-        - Exports products to Mali, Burkina Faso, Côte d'Ivoire and Angola.
-        - Products include Biscuits, Chocolate, Candy and Dates.
+    Company Profile
 
-        Your responsibilities:
+    • Imports food products from Turkey, Morocco, Tunisia and Brazil.
 
-        1. Analyze inventory.
+    • Exports products to Mali, Burkina Faso,
+    Côte d'Ivoire and Angola.
 
-        2. Analyze future demand.
+    Products
 
-        3. Analyze seasonal demand.
+    • Biscuits
+    • Chocolate
+    • Candy
+    • Dates
 
-        4. Recommend imports.
+    Current Business Report
 
-        5. Recommend promotions.
+    {json.dumps(report, indent=4)}
 
-        6. Reduce expiry losses.
+    Your Responsibilities
 
-        7. Improve company profitability.
+    1. Analyze inventory health.
 
-        8. Suggest inventory optimization.
+    2. Analyze sales performance.
 
-        9. Answer like a professional Supply Chain and Business Consultant.
-        Rules:
+    3. Detect business risks.
 
-        - Answer only from the inventory provided.
-        - Never invent products.
-        - If information is missing, clearly state that.
-        - Give practical business advice whenever possible.
-        - Keep answers concise and professional.
+    4. Recommend future imports.
 
-        Inventory:
+    5. Recommend promotions.
 
-        {inventory}
+    6. Explain business decisions.
 
-        User Question:
+    7. Improve profitability.
 
-        {question}
+    8. Reduce expiry losses.
 
-        Business Answer:
-        """
+    Rules
+
+    • Only use the information contained in the Business Report.
+
+    • Never invent products or numbers.
+
+    • If information is unavailable,
+    clearly state that.
+
+    • Answer as a senior Supply Chain,
+    Inventory and Business Consultant.
+
+    • Keep answers professional,
+    practical and concise.
+
+    User Question
+
+    {question}
+
+    Business Answer
+    """
 
         return GemmaService.ask(prompt)
     

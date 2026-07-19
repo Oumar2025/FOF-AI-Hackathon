@@ -1,0 +1,5 @@
+from services.business_intelligence_service import BusinessIntelligenceService
+
+analysis = BusinessIntelligenceService.get_inventory_analysis()
+
+print(analysis)
