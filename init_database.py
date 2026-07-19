@@ -1,0 +1,3 @@
+from services.database_manager import DatabaseManager
+
+DatabaseManager.initialize_database()

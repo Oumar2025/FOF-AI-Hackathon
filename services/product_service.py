@@ -269,3 +269,142 @@ class ProductService:
         products = ProductService.get_all_products()
 
         return [p[1] for p in products]
+
+
+    @staticmethod
+    def seed_demo_products():
+
+        import sqlite3
+        from config.settings import DATABASE_NAME
+
+        conn = sqlite3.connect(DATABASE_NAME)
+        cursor = conn.cursor()
+
+        # Don't insert again if products already exist
+        cursor.execute("SELECT COUNT(*) FROM products")
+
+        if cursor.fetchone()[0] > 0:
+            conn.close()
+            return
+
+        demo_products = [
+
+            (
+                "Koka",
+                "Noodles",
+                "Koka",
+                "Singapore",
+                "Mali",
+                500,
+                "Boxes",
+                8.50,
+                12.00,
+                "2026-01-01",
+                "2027-01-01",
+                "Warehouse A",
+                "Available"
+            ),
+
+            (
+                "TOP",
+                "Biscuit",
+                "TOP",
+                "Turkey",
+                "Mali",
+                350,
+                "Cartons",
+                10.00,
+                15.00,
+                "2026-02-01",
+                "2027-02-01",
+                "Warehouse A",
+                "Available"
+            ),
+
+            (
+                "LAZTO",
+                "Candy",
+                "LAZTO",
+                "Turkey",
+                "Burkina Faso",
+                450,
+                "Boxes",
+                6.50,
+                10.00,
+                "2026-03-01",
+                "2027-03-01",
+                "Warehouse B",
+                "Available"
+            ),
+
+            (
+                "Romma",
+                "Chocolate",
+                "Romma",
+                "Turkey",
+                "Angola",
+                280,
+                "Cartons",
+                14.00,
+                20.00,
+                "2026-02-15",
+                "2027-02-15",
+                "Warehouse A",
+                "Available"
+            ),
+
+            (
+                "Oreo Biscuit",
+                "Biscuit",
+                "Oreo",
+                "Indonesia",
+                "Mali",
+                600,
+                "Boxes",
+                7.00,
+                11.00,
+                "2026-01-10",
+                "2027-01-10",
+                "Warehouse C",
+                "Available"
+            ),
+
+            (
+                "BCSO",
+                "Chocolate",
+                "BCSO",
+                "Turkey",
+                "Côte d'Ivoire",
+                320,
+                "Cartons",
+                12.00,
+                17.50,
+                "2026-02-20",
+                "2027-02-20",
+                "Warehouse B",
+                "Available"
+            )
+
+        ]
+
+        cursor.executemany("""
+            INSERT INTO products(
+                product_name,
+                category,
+                brand,
+                supplier_country,
+                destination_country,
+                quantity,
+                unit,
+                cost_price,
+                selling_price,
+                manufacture_date,
+                expiry_date,
+                warehouse,
+                status
+            )
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+        """, demo_products)
+
+        conn.commit()
+        conn.close()    

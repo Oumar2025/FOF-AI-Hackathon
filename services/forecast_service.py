@@ -8,23 +8,45 @@ class ForecastService:
     @staticmethod
     def forecast_product(product_name):
 
-        df = pd.read_csv("data/sales_history.csv")
+        import sqlite3
+        from config.settings import DATABASE_NAME
 
-        df = df[df["Product"] == product_name]
+        conn = sqlite3.connect(DATABASE_NAME)
+
+        query = """
+            SELECT
+                sh.sale_date,
+                sh.units_sold
+            FROM sales_history sh
+            JOIN products p
+                ON sh.product_id = p.product_id
+            WHERE p.product_name = ?
+            ORDER BY sh.sale_date
+        """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=(product_name,)
+        )
+
+        conn.close()
 
         if len(df) < 2:
             return None
 
         df = df.rename(
             columns={
-                "Date": "ds",
-                "UnitsSold": "y"
+                "sale_date": "ds",
+                "units_sold": "y"
             }
         )
 
+        df["ds"] = pd.to_datetime(df["ds"])
+
         model = Prophet()
 
-        model.fit(df[["ds", "y"]])
+        model.fit(df)
 
         future = model.make_future_dataframe(
             periods=3,
@@ -34,9 +56,14 @@ class ForecastService:
         forecast = model.predict(future)
 
         return forecast[
-            ["ds", "yhat", "yhat_lower", "yhat_upper"]
+            [
+                "ds",
+                "yhat",
+                "yhat_lower",
+                "yhat_upper"
+            ]
         ]
-
+    
     @staticmethod
     def get_next_month_prediction(product_name):
 
@@ -52,30 +79,38 @@ class ForecastService:
     @staticmethod
     def seasonal_multiplier(category):
 
-        seasons = pd.read_csv(
-            "data/seasonal_events.csv"
-        )
+        import sqlite3
+        from config.settings import DATABASE_NAME
 
-        today = datetime.today()
+        conn = sqlite3.connect(DATABASE_NAME)
 
-        for _, row in seasons.iterrows():
+        cursor = conn.cursor()
 
-            start = datetime.strptime(
-                row["StartDate"],
-                "%Y-%m-%d"
-            )
+        cursor.execute("""
+            SELECT
+                event,
+                start_date,
+                end_date,
+                demand_multiplier
+            FROM seasonal_events
+            WHERE category = ?
+        """, (category,))
 
-            end = datetime.strptime(
-                row["EndDate"],
-                "%Y-%m-%d"
-            )
+        rows = cursor.fetchall()
 
-            if (
-                row["Category"] == category
-                and start <= today <= end
-            ):
+        conn.close()
 
-                return row["DemandMultiplier"], row["Event"]
+        today = datetime.today().date()
+
+        for row in rows:
+
+            event = row[0]
+            start = datetime.strptime(row[1], "%Y-%m-%d").date()
+            end = datetime.strptime(row[2], "%Y-%m-%d").date()
+            multiplier = row[3]
+
+            if start <= today <= end:
+                return multiplier, event
 
         return 1.0, None    
     
