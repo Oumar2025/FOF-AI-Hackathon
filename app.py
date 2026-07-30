@@ -11,6 +11,7 @@ from views.executive_report import show_executive_report
 from services.scheduler_service import SchedulerService
 from views.alert_center import show_alert_center
 from views.home import show_home
+from views.login import show_login
 
 
 # Start the alert scheduler
@@ -18,13 +19,22 @@ if "scheduler_started" not in st.session_state:
     SchedulerService.start()
     st.session_state.scheduler_started = True
 
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-st.set_page_config(
-    page_title="FOF-AI",
-    page_icon="🤖",
-    layout="wide",
-    initial_sidebar_state="expanded"
+
+    st.set_page_config(
+        page_title="FOF-AI",
+        page_icon="🤖",
+        layout="wide",
+        initial_sidebar_state="expanded"
 )
+    
+if not st.session_state.logged_in:
+
+    show_login()
+
+    st.stop()    
 
 st.markdown("""
 <style>

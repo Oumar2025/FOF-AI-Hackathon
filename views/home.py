@@ -1,6 +1,16 @@
 import streamlit as st
 
 
+
+def flag_row(flag_path, country):
+    col1, col2 = st.columns([1, 6])
+
+    with col1:
+        st.image(flag_path, width=32)
+
+    with col2:
+        st.markdown(f"**{country}**")
+
 def show_home():
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -49,29 +59,23 @@ tracking product expiry, and supporting better business decisions through AI.
 
     with col1:
 
-        st.markdown(
-            """
-### Supplier Countries
+        st.subheader("🌍 Supplier Countries")
 
-- 🇹🇷 Turkey
-- 🇲🇦 Morocco
-- 🇹🇳 Tunisia
-- 🇧🇷 Brazil
-"""
-        )
+        flag_row("assets/flags/turkey.png", "Turkey")
+        flag_row("assets/flags/morocco.png", "Morocco")
+        flag_row("assets/flags/tunisia.png", "Tunisia")
+        flag_row("assets/flags/brazil.png", "Brazil")
+
 
     with col2:
 
-        st.markdown(
-            """
-### Destination Countries
+        st.subheader("✈️ Destination Countries")
 
-- 🇲🇱 Mali
-- 🇧🇫 Burkina Faso
-- 🇨🇮 Côte d'Ivoire
-- 🇦🇴 Angola
-"""
-        )
+        flag_row("assets/flags/mali.png", "Mali")
+        flag_row("assets/flags/burkina_faso.png", "Burkina Faso")
+        flag_row("assets/flags/cote_divoire.png", "Côte d'Ivoire")
+        flag_row("assets/flags/angola.png", "Angola")
+
 
     st.markdown("---")
 

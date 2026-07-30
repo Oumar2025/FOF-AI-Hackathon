@@ -1,5 +1,5 @@
 
-from PIL import report
+#from PIL import report
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -7,7 +7,14 @@ import plotly.express as px
 from services.product_service import ProductService
 from services.ai_service import AIService
 
+def flag_row(flag_path, country):
+    col1, col2 = st.columns([1, 6])
 
+    with col1:
+        st.image(flag_path, width=30)
+
+    with col2:
+        st.markdown(f"**{country}**")
 
 
 def show_dashboard():
@@ -175,23 +182,32 @@ def show_dashboard():
     st.header("🏢 Company Overview")
 
     st.write("""
-Welcome to **FOF-AI**.
+    Welcome to **FOF-AI**.
 
-This intelligent system is designed for **ETS FOFANA CONFISERIE**
-to manage inventory, monitor product expiry,
-forecast demand, and provide AI-powered business insights.
+    This intelligent system is designed for **ETS FOFANA CONFISERIE**
+    to manage inventory, monitor product expiry,
+    forecast demand, and provide AI-powered business insights.
+    """)
 
-Current Supplier Countries:
+    st.markdown("---")
 
-- 🇹🇷 Turkey
-- 🇲🇦 Morocco
-- 🇹🇳 Tunisia
-- 🇧🇷 Brazil
+    col1, col2 = st.columns(2)
 
-Current Destination Countries:
+    with col1:
 
-- 🇲🇱 Mali
-- 🇧🇫 Burkina Faso
-- 🇨🇮 Côte d'Ivoire
-- 🇦🇴 Angola
-""")
+        st.subheader("🌍 Supplier Countries")
+
+        flag_row("assets/flags/turkey.png", "Turkey")
+        flag_row("assets/flags/morocco.png", "Morocco")
+        flag_row("assets/flags/tunisia.png", "Tunisia")
+        flag_row("assets/flags/brazil.png", "Brazil")
+
+
+    with col2:
+
+        st.subheader("✈️ Destination Countries")
+
+        flag_row("assets/flags/mali.png", "Mali")
+        flag_row("assets/flags/burkina_faso.png", "Burkina Faso")
+        flag_row("assets/flags/cote_divoire.png", "Côte d'Ivoire")
+        flag_row("assets/flags/angola.png", "Angola")

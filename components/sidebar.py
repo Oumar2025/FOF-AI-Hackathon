@@ -18,23 +18,40 @@ def show_sidebar():
         unsafe_allow_html=True
     )
 
-    st.sidebar.markdown("---")
+    # Initialize current page
+    if "menu" not in st.session_state:
+        st.session_state.menu = "🏠 Home"
 
-    
-    menu = st.sidebar.pills(
-        "Navigation",
-        [
-            "🏠 Home",
-            "📊 Dashboard",
-            "📦 Inventory",
-            "📈 Forecast",
-            "🤖 AI Assistant",
-            "📋 Executive Report",
-            "🚨 Alert Center",
-            "⚙️ Settings"
-        ],
-        default="🏠 Home"
-    )
+    st.sidebar.markdown("### Navigation")
+
+    pages = [
+        "🏠 Home",
+        "📊 Dashboard",
+        "📦 Inventory",
+        "📈 Forecast",
+        "🤖 AI Assistant",
+        "📋 Executive Report",
+        "🚨 Alert Center",
+        "⚙️ Settings",
+    ]
+
+    for page in pages:
+
+        if page == st.session_state.menu:
+            button_type = "primary"
+        else:
+            button_type = "secondary"
+
+        if st.sidebar.button(
+            page,
+            use_container_width=True,
+            type=button_type,
+            key=page,
+        ):
+            st.session_state.menu = page
+            st.rerun()
+
+    menu = st.session_state.menu
 
 
     st.sidebar.markdown("---")
@@ -51,4 +68,13 @@ Built with Gemma 4
 """
     )
 
+    st.sidebar.markdown("---")
+
+    if st.sidebar.button("🚪 Logout"):
+
+        st.session_state.logged_in = False
+
+        st.rerun()
+
     return menu
+
