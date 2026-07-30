@@ -182,7 +182,8 @@ def show_inventory():
         manufacture_date=str(manufacture_date),
         expiry_date=str(expiry_date),
         warehouse=warehouse,
-        status=status
+        status=status,
+        product_id=None if selected_row is None else selected_row[0]
     )
 
     # -----------------------------
@@ -208,10 +209,7 @@ def show_inventory():
 
         else:
 
-            ProductService.update_product(
-                selected_row[0],
-                product
-            )
+            ProductService.update_product(product)
 
             st.success("✅ Product updated successfully!")
 
