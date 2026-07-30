@@ -28,6 +28,7 @@ def show_sidebar():
             "📈 Forecast",
             "🤖 AI Assistant",
             "📋 Executive Report",
+            "🚨 Alert Center",
             "⚙️ Settings"
         ]
     )

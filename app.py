@@ -8,9 +8,14 @@ from views.inventory import show_inventory
 from views.forecast import show_forecast
 from views.ai_assistant import show_ai_assistant
 from views.executive_report import show_executive_report
-# -------------------------------------------------
-# Page Configuration
-# -------------------------------------------------
+from services.scheduler_service import SchedulerService
+from views.alert_center import show_alert_center
+
+
+# Start the alert scheduler
+if "scheduler_started" not in st.session_state:
+    SchedulerService.start()
+    st.session_state.scheduler_started = True
 
 
 st.set_page_config(
@@ -102,4 +107,10 @@ elif menu == "🤖 AI Assistant":
     show_ai_assistant()
 
 elif menu == "📋 Executive Report":
-    show_executive_report()    
+    show_executive_report()
+
+elif menu == "🚨 Alert Center":
+    show_alert_center()  
+    
+elif menu == "⚙️ Settings":
+    st.info("Settings page coming soon.")

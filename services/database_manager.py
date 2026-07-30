@@ -1,4 +1,6 @@
 import sqlite3
+
+from narwhals.selectors import datetime
 from config.settings import DATABASE_NAME
 
 
@@ -10,6 +12,7 @@ class DatabaseManager:
         conn = sqlite3.connect(DATABASE_NAME)
 
         cursor = conn.cursor()
+        
 
         cursor.execute("PRAGMA foreign_keys = ON")
 
@@ -19,7 +22,7 @@ class DatabaseManager:
 
         cursor.execute("""
 
-        CREATE TABLE products(
+        CREATE TABLE IF NOT EXISTS products(
 
             product_id INTEGER PRIMARY KEY AUTOINCREMENT,
 
@@ -59,7 +62,7 @@ class DatabaseManager:
 
         cursor.execute("""
 
-        CREATE TABLE sales_history(
+        CREATE TABLE IF NOT EXISTS sales_history(
 
             sale_id INTEGER PRIMARY KEY AUTOINCREMENT,
 
@@ -70,6 +73,8 @@ class DatabaseManager:
             sale_date TEXT NOT NULL,
 
             units_sold INTEGER NOT NULL,
+
+            UNIQUE(product_id, alert_level),
 
             FOREIGN KEY(product_id)
                 REFERENCES products(product_id)
@@ -85,7 +90,7 @@ class DatabaseManager:
 
         cursor.execute("""
 
-        CREATE TABLE seasonal_events(
+        CREATE TABLE IF NOT EXISTS seasonal_events(
 
             event_id INTEGER PRIMARY KEY AUTOINCREMENT,
 
@@ -102,6 +107,35 @@ class DatabaseManager:
         )
 
         """)
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS alert_history (
+
+            alert_id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            product_id INTEGER NOT NULL,
+
+            alert_level INTEGER NOT NULL,
+
+            sent_at TEXT NOT NULL,
+
+            acknowledged INTEGER DEFAULT 0,
+
+            muted INTEGER DEFAULT 0,
+
+            resolved INTEGER DEFAULT 0,
+
+            UNIQUE(product_id, alert_level),
+
+            FOREIGN KEY(product_id)
+                REFERENCES products(product_id)
+                ON DELETE CASCADE
+
+        )
+        """)
+
+
+        
 
         conn.commit()
 

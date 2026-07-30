@@ -4,6 +4,7 @@ from models.product import Product
 from config.settings import DATABASE_NAME
 
 
+
 class ProductService:
 
     @staticmethod
@@ -80,7 +81,7 @@ class ProductService:
         cursor.execute("SELECT COUNT(*) FROM products")
         total_products = cursor.fetchone()[0]
 
-        # Low Stock (Quantity أقل من 100)
+        # Low Stock
         cursor.execute("""
             SELECT COUNT(*)
             FROM products
@@ -88,10 +89,33 @@ class ProductService:
         """)
         low_stock = cursor.fetchone()[0]
 
-        # Expiring Soon (currently placeholder)
+        # Expiring Soon
+        from datetime import datetime
+
+        cursor.execute("""
+            SELECT expiry_date
+            FROM products
+        """)
+
+        rows = cursor.fetchall()
+
+        today = datetime.now().date()
+
         expiring_soon = 0
 
-        # Destination Countries
+        for row in rows:
+
+            expiry = datetime.strptime(
+                row[0],
+                "%Y-%m-%d"
+            ).date()
+
+            days_left = (expiry - today).days
+
+            if 0 <= days_left <= 30:
+                expiring_soon += 1
+
+        # Countries
         cursor.execute("""
             SELECT COUNT(DISTINCT destination_country)
             FROM products

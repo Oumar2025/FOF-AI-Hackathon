@@ -1,9 +1,10 @@
 from datetime import datetime
 from services.forecast_service import ForecastService
 from services.product_service import ProductService
-from services.product_service import ProductService
-from services.gemma_service import GemmaService
 
+from services.gemma_service import GemmaService
+from services.alert_service import AlertService
+from services.notification_service import NotificationService
 
 
 
@@ -232,21 +233,41 @@ class AIService:
             analysis = AIService.analyze_product(product)
 
             if analysis["days_left"] <= 30:
-                expiry += 1
-                report["critical"].append(
-                    f"{product[1]} expires in {analysis['days_left']} days."
-                )
 
-            if product[6] < 100:
-                low_stock += 1
-                report["warnings"].append(
-                    f"Import more {product[1]} from {product[4]}."
-                )
+                alert_level = 30
 
-            if product[6] > 1000:
-                report["recommendations"].append(
-                    f"Slow imports of {product[1]}."
-                )
+                if not AlertService.has_alert_been_sent(
+                    product[0],      # product_id
+                    alert_level
+                ):
+
+                    subject = f"⚠️ FOF-AI Alert: {product[1]} Near Expiry"
+
+                    message = f"""
+            Product: {product[1]}
+
+            Current Stock: {product[6]} {product[7]}
+
+            Expiry Date: {product[11]}
+
+            Days Remaining: {analysis['days_left']}
+
+            AI Recommendation:
+
+            {analysis['recommendation']}
+
+            Generated automatically by FOF-AI.
+            """
+
+                    NotificationService.send_email(
+                        subject,
+                        message
+                    )
+
+                    AlertService.save_alert(
+                        product[0],
+                        alert_level
+                    )
 
         if expiry > 3 or low_stock > 5:
             report["health"] = "Needs Attention"
@@ -439,37 +460,4 @@ class AIService:
     @staticmethod
     def check_and_send_alerts():
 
-            from services.notification_service import NotificationService
-
-            products = ProductService.get_all_products()
-
-            for product in products:
-
-                analysis = AIService.analyze_product(product)
-
-                if analysis["days_left"] <= 30:
-
-                    subject = f"⚠️ FOF-AI Alert: {product[1]} Near Expiry"
-
-                    message = f"""
-    Product: {product[1]}
-
-    Current Stock: {product[6]} {product[7]}
-
-    Expiry Date: {product[11]}
-
-    Days Remaining: {analysis['days_left']}
-
-    AI Recommendation:
-
-    {analysis['recommendation']}
-
-    
-
-    Generated automatically by FOF-AI.
-    """
-
-                    NotificationService.send_email(
-                        subject,
-                        message
-                    )
+        AlertService.process_alerts()
