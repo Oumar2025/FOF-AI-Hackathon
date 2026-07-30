@@ -10,6 +10,7 @@ from views.ai_assistant import show_ai_assistant
 from views.executive_report import show_executive_report
 from services.scheduler_service import SchedulerService
 from views.alert_center import show_alert_center
+from views.home import show_home
 
 
 # Start the alert scheduler
@@ -90,7 +91,10 @@ menu = show_sidebar()
 # Dashboard
 # -------------------------------------------------
 
-if menu == "📊 Dashboard":
+if menu == "🏠 Home":
+    show_home()
+
+elif menu == "📊 Dashboard":
     show_dashboard()
     
 # -------------------------------------------------
@@ -111,6 +115,6 @@ elif menu == "📋 Executive Report":
 
 elif menu == "🚨 Alert Center":
     show_alert_center()  
-    
+
 elif menu == "⚙️ Settings":
     st.info("Settings page coming soon.")

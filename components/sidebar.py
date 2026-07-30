@@ -20,9 +20,11 @@ def show_sidebar():
 
     st.sidebar.markdown("---")
 
+    
     menu = st.sidebar.pills(
         "Navigation",
         [
+            "🏠 Home",
             "📊 Dashboard",
             "📦 Inventory",
             "📈 Forecast",
@@ -30,8 +32,10 @@ def show_sidebar():
             "📋 Executive Report",
             "🚨 Alert Center",
             "⚙️ Settings"
-        ]
+        ],
+        default="🏠 Home"
     )
+
 
     st.sidebar.markdown("---")
 
