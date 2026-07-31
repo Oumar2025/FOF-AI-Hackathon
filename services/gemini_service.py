@@ -4,9 +4,7 @@ from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
-print("===================================")
-print("API KEY:", os.getenv("GOOGLE_API_KEY"))
-print("===================================")
+
 
 client = genai.Client(
     api_key=os.getenv("GOOGLE_API_KEY")
