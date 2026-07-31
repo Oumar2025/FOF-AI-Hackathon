@@ -16,7 +16,7 @@ from services.scheduler_service import SchedulerService
 from views.alert_center import show_alert_center
 from views.home import show_home
 from views.login import show_login
-from database.database import create_database
+
 
 
 
@@ -35,8 +35,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-# Create SQLite database and tables if they don't exist
-create_database()    
+
     
 if not st.session_state.logged_in:
 
