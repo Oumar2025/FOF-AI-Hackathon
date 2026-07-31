@@ -1,4 +1,8 @@
 import streamlit as st
+from services.database_manager import DatabaseManager
+# Initialize SQLite database
+DatabaseManager.initialize_database()
+
 import pandas as pd
 import plotly.express as px
 from models.product import Product
@@ -12,6 +16,9 @@ from services.scheduler_service import SchedulerService
 from views.alert_center import show_alert_center
 from views.home import show_home
 from views.login import show_login
+from database.database import create_database
+
+
 
 
 # Start the alert scheduler
@@ -22,13 +29,14 @@ if "scheduler_started" not in st.session_state:
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-
-    st.set_page_config(
-        page_title="FOF-AI",
-        page_icon="🤖",
-        layout="wide",
-        initial_sidebar_state="expanded"
+st.set_page_config(
+    page_title="FOF-AI",
+    page_icon="🤖",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
+# Create SQLite database and tables if they don't exist
+create_database()    
     
 if not st.session_state.logged_in:
 
