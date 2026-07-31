@@ -3,15 +3,16 @@ import streamlit as st
 
 def show_sidebar():
 
+    st.sidebar.image(
+        "assets/lo.png",
+        use_container_width=True
+    )
+
     st.sidebar.markdown(
         """
-        <h1 style='text-align:center; margin-bottom:0;'>
-        🤖 FOF-AI
-        </h1>
-
         <p style='text-align:center;
         color:#94A3B8;
-        margin-top:0;'>
+        margin-top:5px;'>
         AI Business Intelligence
         </p>
         """,

@@ -1,5 +1,5 @@
 import streamlit as st
-
+from components.logo_header import show_logo_header
 
 
 def flag_row(flag_path, country):
@@ -19,22 +19,8 @@ def show_home():
 
     with col2:
 
-        st.image(
-            "assets/logo.png",
-            width=220
-        )
-
-        st.markdown(
-            """
-            <h1 style='text-align:center;'>
-            🤖 FOF-AI
-            </h1>
-
-            <h4 style='text-align:center;color:gray;'>
-            AI Business Intelligence Platform
-            </h4>
-            """,
-            unsafe_allow_html=True
+        show_logo_header(
+            subtitle="AI Business Intelligence Platform"
         )
 
     st.markdown("---")

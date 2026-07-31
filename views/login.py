@@ -1,5 +1,7 @@
 import streamlit as st
 
+from components.logo_header import show_logo_header
+
 
 USERNAME = "Fofana"
 PASSWORD = "2004Fofana"
@@ -13,30 +15,10 @@ def show_login():
 
     with center:
 
-        st.image(
-            "assets/logo.png",
-            width=220
+        show_logo_header(
+            subtitle="AI Business Intelligence Platform",
+            show_login_text=True
         )
-
-        st.markdown(
-            """
-            <h1 style='text-align:center;'>
-            🤖 FOF-AI
-            </h1>
-
-            <h3 style='text-align:center;color:gray;'>
-            AI Business Intelligence Platform
-            </h3>
-
-            <p style='text-align:center;'>
-            Please sign in to continue
-            </p>
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
         username = st.text_input(
             "Username",
             placeholder="ENTER USERNAME"
