@@ -74,7 +74,7 @@ class DatabaseManager:
 
             units_sold INTEGER NOT NULL,
 
-            UNIQUE(product_id, alert_level),
+           
 
             FOREIGN KEY(product_id)
                 REFERENCES products(product_id)
@@ -125,7 +125,7 @@ class DatabaseManager:
 
             resolved INTEGER DEFAULT 0,
 
-            UNIQUE(product_id, alert_level),
+            
 
             FOREIGN KEY(product_id)
                 REFERENCES products(product_id)
